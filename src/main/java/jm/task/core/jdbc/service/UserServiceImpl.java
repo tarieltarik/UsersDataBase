@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    public static long id = 1;
     Util  util = new Util();
     Connection connection;
 
@@ -84,7 +83,6 @@ public class UserServiceImpl implements UserService {
         }catch (SQLException e){
             e.printStackTrace();
         }finally {
-            id++;
             try{
                 if(preparedStatement != null){
                     preparedStatement.close();
