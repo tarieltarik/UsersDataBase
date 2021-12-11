@@ -1,64 +1,189 @@
 package jm.task.core.dao;
 
 import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.service.UserService;
-import jm.task.core.jdbc.service.UserServiceImpl;
+import jm.task.core.jdbc.util.Util;
 
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private final UserService usi = new UserServiceImpl();
     public UserDaoJDBCImpl() {
 
     }
 
+    Util util = new Util();
+    Connection connection;
+
     public void createUsersTable() {
+        connection = util.getMySQLConnection();
+        PreparedStatement preparedStatement = null;
+
+        String sql = "CREATE TABLE user (\n" +
+                "  iduser INT NOT NULL AUTO_INCREMENT,\n" +
+                "  name VARCHAR(45) NOT NULL,\n" +
+                "  lastname VARCHAR(45) NOT NULL,\n" +
+                "  age INT NOT NULL,\n" +
+                "  PRIMARY KEY (iduser))\n";
+
         try {
-            usi.createUsersTable();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+
+            }
         }
     }
 
     public void dropUsersTable() {
+        connection = util.getMySQLConnection();
+        PreparedStatement preparedStatement = null;
+
+        String sql = "DROP TABLE user";
+
         try {
-            usi.dropUsersTable();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+
+            }
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
+        connection = util.getMySQLConnection();
+        PreparedStatement preparedStatement = null;
+
+        String sql = "INSERT INTO user(name,lastname,age) VALUES(?,?,?)";
+
+
         try {
-            usi.saveUser(name,lastName,age);
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setByte(3, age);
+
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+
+            }
         }
+
     }
 
     public void removeUserById(long id) {
+        connection = util.getMySQLConnection();
+        PreparedStatement preparedStatement = null;
+
+        String sql = "DELETE FROM user WHERE iduser=" + id;
+
         try {
-            usi.removeUserById(id);
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+
+            }
         }
     }
 
     public List<User> getAllUsers() {
+        connection = util.getMySQLConnection();
+        List<User> users = new ArrayList<>();
+        Statement statement = null;
+
+        String sql = "SELECT * FROM user";
+
         try {
-            return usi.getAllUsers();
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getLong("iduser"));
+                user.setName(resultSet.getString("name"));
+                user.setLastName(resultSet.getString("lastname"));
+                user.setAge(resultSet.getByte("age"));
+
+                users.add(user);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+
+            }
         }
+        return users;
     }
 
     public void cleanUsersTable() {
+        connection = util.getMySQLConnection();
+        PreparedStatement preparedStatement = null;
+
+        String sql = "DELETE FROM user";
+
         try {
-            usi.cleanUsersTable();
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+
+            }
         }
     }
 }

@@ -51,8 +51,8 @@ public class UserDaoHibernateImpl implements UserDao {
         transaction = null;
         try {
             transaction = session.beginTransaction();
-
             String sql = "DROP TABLE IF EXISTS users";
+
 
             Query query = session.createSQLQuery(sql).addEntity(User.class);
 
@@ -74,7 +74,6 @@ public class UserDaoHibernateImpl implements UserDao {
         transaction = null;
         try {
             session = Util.getSessionFactory().openSession();
-            transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
             transaction.commit();
         } catch (Exception e) {
@@ -119,7 +118,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public List<User> getAllUsers() {
         session = Util.getSessionFactory().openSession();
         try {
-            return session.createQuery("from Service").list();
+            return session.createQuery("from User").list();
         } catch (Exception e) {
             return new ArrayList<>();
         }

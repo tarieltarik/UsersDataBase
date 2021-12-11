@@ -1,183 +1,38 @@
 package jm.task.core.jdbc.service;
 
+import jm.task.core.dao.UserDao;
+import jm.task.core.dao.UserDaoHibernateImpl;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    Util  util = new Util();
-    Connection connection;
+    UserDao ud = new UserDaoHibernateImpl();
+    Util util = new Util();
 
-    public void createUsersTable(){
-        connection = util.getMySQLConnection();
-        PreparedStatement preparedStatement = null;
-
-        String sql = "CREATE TABLE user (\n" +
-                "  iduser INT NOT NULL AUTO_INCREMENT,\n" +
-                "  name VARCHAR(45) NOT NULL,\n" +
-                "  lastname VARCHAR(45) NOT NULL,\n" +
-                "  age INT NOT NULL,\n" +
-                "  PRIMARY KEY (iduser))\n";
-
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }finally {
-            try{
-                if(preparedStatement != null){
-                    preparedStatement.close();
-                }
-                if(connection != null){
-                    connection.close();
-                }
-            }catch (SQLException e){
-
-            }
-        }
+    public void createUsersTable() {
+        ud.createUsersTable();
     }
 
-    public void dropUsersTable(){
-        connection = util.getMySQLConnection();
-        PreparedStatement preparedStatement = null;
-
-        String sql = "DROP TABLE user";
-
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }finally {
-            try{
-                if(preparedStatement != null){
-                    preparedStatement.close();
-                }
-                if(connection != null){
-                    connection.close();
-                }
-            }catch (SQLException e){
-
-            }
-        }
+    public void dropUsersTable() {
+        ud.dropUsersTable();
     }
 
-    public void saveUser(String name, String lastName, byte age){
-        connection = util.getMySQLConnection();
-        PreparedStatement preparedStatement = null;
-
-        String sql = "INSERT INTO user(name,lastname,age) VALUES(?,?,?)";
-
-
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1,name);
-            preparedStatement.setString(2,lastName);
-            preparedStatement.setByte(3,age);
-
-            preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }finally {
-            try{
-                if(preparedStatement != null){
-                    preparedStatement.close();
-                }
-                if(connection != null){
-                    connection.close();
-                }
-            }catch (SQLException e){
-
-            }
-        }
-
+    public void saveUser(String name, String lastName, byte age) {
+        ud.saveUser(name, lastName, age);
     }
 
-    public void removeUserById(long id){
-        connection = util.getMySQLConnection();
-        PreparedStatement preparedStatement = null;
-
-        String sql = "DELETE FROM user WHERE iduser=" + id;
-
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }finally {
-            try{
-                if(preparedStatement != null){
-                    preparedStatement.close();
-                }
-                if(connection != null){
-                    connection.close();
-                }
-            }catch (SQLException e){
-
-            }
-        }
+    public void removeUserById(long id) {
+        ud.removeUserById(id);
     }
 
-    public List<User> getAllUsers() throws SQLException {
-        connection = util.getMySQLConnection();
-        List<User> users = new ArrayList<>();
-        Statement statement = null;
-
-        String sql = "SELECT * FROM user";
-
-        try {
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while(resultSet.next()){
-                User user = new User();
-                user.setId(resultSet.getLong("iduser"));
-                user.setName(resultSet.getString("name"));
-                user.setLastName(resultSet.getString("lastname"));
-                user.setAge(resultSet.getByte("age"));
-
-                users.add(user);
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }finally {
-            if(statement != null){
-                statement.close();
-            }
-            if(connection != null){
-                connection.close();
-            }
-        }
-        return users;
+    public List<User> getAllUsers() {
+        return ud.getAllUsers();
     }
 
-    public void cleanUsersTable(){
-        connection = util.getMySQLConnection();
-        PreparedStatement preparedStatement = null;
-
-        String sql = "DELETE FROM user";
-
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }finally {
-            try{
-                if(preparedStatement != null){
-                    preparedStatement.close();
-                }
-                if(connection != null){
-                    connection.close();
-                }
-            }catch (SQLException e){
-
-            }
-        }
+    public void cleanUsersTable() {
+        ud.cleanUsersTable();
     }
-
 
 }
