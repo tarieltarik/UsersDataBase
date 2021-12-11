@@ -10,7 +10,6 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
         UserDao ud = new UserDaoJDBCImpl();
         ud.createUsersTable();
         List<User> users = Arrays.asList(new User("Timur", "Muratov", (byte) 10),
@@ -30,9 +29,11 @@ public class Main {
                 new User("Oleg", "Volkov", (byte) 10),
                 new User("Ivan", "Muratov", (byte) 10)
         );
-        usersH.forEach(u -> ud.saveUser(u.getName(), u.getLastName(), u.getAge()));
-        usersH = ud.getAllUsers();
-        usersH.forEach(u -> System.out.println(u.toString()));
+        usersH.forEach(u -> Ud.saveUser(u.getName(), u.getLastName(), u.getAge()));
+        usersH = Ud.getAllUsers();
+        for (User u : usersH) {
+            System.out.println();
+        }
         Ud.cleanUsersTable();
         Ud.dropUsersTable();
 

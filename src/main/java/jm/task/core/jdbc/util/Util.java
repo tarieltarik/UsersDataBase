@@ -18,6 +18,19 @@ public class Util {
     private final static String USER_NAME = "root";
     private final static String PASSWORD = "root";
 
+    //Simple connection
+    public Connection getMySQLConnection() {
+        Connection connection = null;
+        try {
+            Class.forName(DRIVER);
+            connection = DriverManager.getConnection(DB_URL, USER_NAME,
+                    PASSWORD);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
+
     //Hibernate connection
     private static StandardServiceRegistry registry;
     private static SessionFactory sessionFactory;
@@ -57,18 +70,6 @@ public class Util {
         if (registry != null) {
             StandardServiceRegistryBuilder.destroy(registry);
         }
-    }
-
-    public Connection getMySQLConnection() {
-        Connection connection = null;
-        try {
-            Class.forName(DRIVER);
-            connection = DriverManager.getConnection(DB_URL, USER_NAME,
-                    PASSWORD);
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return connection;
     }
 
 }
