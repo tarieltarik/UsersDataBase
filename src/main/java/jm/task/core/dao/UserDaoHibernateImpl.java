@@ -26,12 +26,12 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             transaction = session.beginTransaction();
 
-            String sql = "CREATE TABLE IF NOT EXISTS users " +
+            String hql = "CREATE TABLE IF NOT EXISTS users " +
                     "(id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                     "name VARCHAR(50) NOT NULL, lastName VARCHAR(50) NOT NULL, " +
                     "age TINYINT NOT NULL)";
 
-            Query query = session.createSQLQuery(sql).addEntity(User.class);
+            Query query = session.createSQLQuery(hql).addEntity(User.class);
 
             transaction.commit();
         } catch (Exception e) {
@@ -51,10 +51,10 @@ public class UserDaoHibernateImpl implements UserDao {
         transaction = null;
         try {
             transaction = session.beginTransaction();
-            String sql = "DROP TABLE IF EXISTS users";
+            String hql = "DROP TABLE IF EXISTS users";
 
 
-            Query query = session.createSQLQuery(sql).addEntity(User.class);
+            Query query = session.createSQLQuery(hql).addEntity(User.class);
 
             transaction.commit();
         } catch (Exception e) {
@@ -115,10 +115,10 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List getAllUsers() {
         session = Util.getSessionFactory().openSession();
         try {
-            return session.createQuery("from User").list();
+            return session.createQuery("FROM users").list();
         } catch (Exception e) {
             return new ArrayList<>();
         }
@@ -129,9 +129,9 @@ public class UserDaoHibernateImpl implements UserDao {
         session = Util.getSessionFactory().openSession();
         transaction = session.beginTransaction();
 
-        String sql = "DELETE FROM users";
+        String hql = "DELETE FROM users";
 
-        Query query = session.createSQLQuery(sql).addEntity(User.class);
+        Query query = session.createSQLQuery(hql).addEntity(User.class);
 
         transaction.commit();
         session.close();
