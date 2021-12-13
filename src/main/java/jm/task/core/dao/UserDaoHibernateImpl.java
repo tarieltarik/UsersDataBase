@@ -22,7 +22,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Session session = Util.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
 
-        String hql = "CREATE TABLE IF NOT EXISTS user" +
+        String hql = "CREATE TABLE IF NOT EXISTS User" +
                 "(iduser BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                 "name VARCHAR(50) NOT NULL, lastName VARCHAR(50) NOT NULL, " +
                 "age TINYINT NOT NULL)";
@@ -37,7 +37,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Session session = Util.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
 
-        String hql = "DROP TABLE IF EXISTS user";
+        String hql = "DROP TABLE IF EXISTS User";
 
         session.createSQLQuery(hql).addEntity(User.class).executeUpdate();
 
@@ -71,7 +71,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public List<User> getAllUsers() {
         Session session = Util.getSessionFactory().openSession();
         session.beginTransaction();
-        List<User> list = session.createQuery("from user", User.class).getResultList();
+        List<User> list = session.createQuery("from User", User.class).getResultList();
         session.getTransaction().commit();
         session.close();
         return list;
@@ -81,7 +81,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void cleanUsersTable() {
         session = Util.getSessionFactory().openSession();
         transaction = session.beginTransaction();
-        String hql = "DELETE FROM user";
+        String hql = "DELETE FROM User";
         session.createSQLQuery(hql).addEntity(User.class).executeUpdate();
         transaction.commit();
         session.close();
