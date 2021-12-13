@@ -19,8 +19,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        session = Util.getSessionFactory().openSession();
-        transaction = session.beginTransaction();
+        Session session = Util.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
 
         String hql = "CREATE TABLE IF NOT EXISTS user" +
                 "(iduser BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
@@ -34,8 +34,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        session = Util.getSessionFactory().openSession();
-        transaction = session.beginTransaction();
+        Session session = Util.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
 
         String hql = "DROP TABLE IF EXISTS user";
 
@@ -47,10 +47,11 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Session session = Util.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
+        Session session = Util.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
         session.save(new User(name, lastName, age));
-        session.getTransaction().commit();
+        transaction.commit();
+        session.close();
     }
 
     @Override
@@ -68,9 +69,9 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        Session session = Util.getSessionFactory().openSession();
+        Session session = Util.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        List<User> list = session.createQuery("from User", User.class).getResultList();
+        List<User> list = session.createQuery("from user", User.class).getResultList();
         session.getTransaction().commit();
         session.close();
         return list;
