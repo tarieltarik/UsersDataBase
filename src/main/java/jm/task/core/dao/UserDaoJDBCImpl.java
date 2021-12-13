@@ -167,7 +167,6 @@ public class UserDaoJDBCImpl implements UserDao {
         PreparedStatement preparedStatement = null;
 
         String sql = "DELETE FROM user";
-
         try {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.executeUpdate();
