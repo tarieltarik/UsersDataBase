@@ -19,8 +19,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        Session session = Util.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
+        session = Util.getSessionFactory().openSession();
+        transaction = session.beginTransaction();
 
         String hql = "CREATE TABLE IF NOT EXISTS User" +
                 "(iduser BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
@@ -34,8 +34,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        Session session = Util.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
+        session = Util.getSessionFactory().openSession();
+        transaction = session.beginTransaction();
 
         String hql = "DROP TABLE IF EXISTS User";
 
@@ -47,8 +47,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Session session = Util.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
+        session = Util.getSessionFactory().openSession();
+        transaction = session.beginTransaction();
         session.save(new User(name, lastName, age));
         transaction.commit();
         session.close();
@@ -69,7 +69,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        Session session = Util.getSessionFactory().openSession();
+        session = Util.getSessionFactory().openSession();
         session.beginTransaction();
         List<User> list = session.createQuery("from User", User.class).getResultList();
         session.getTransaction().commit();
