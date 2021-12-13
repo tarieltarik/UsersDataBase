@@ -11,8 +11,6 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-
-
         UserDao ud = new UserDaoHibernateImpl();
         ud.createUsersTable();
         List<User> users = Arrays.asList(new User("Timur", "Muratov", (byte) 10),
@@ -20,13 +18,14 @@ public class Main {
                 new User("Oleg", "Volkov", (byte) 10),
                 new User("Ivan", "Muratov", (byte) 10)
         );
-        users.forEach(u -> ud.saveUser(u.getName(), u.getLastName(), u.getAge()));
+        users.forEach(u -> {
+            ud.saveUser(u.getName(), u.getLastName(), u.getAge());
+            System.out.println("User с именем - " + u.getName() + " добавлен в базу данных ");
+        });
         users = ud.getAllUsers();
         users.forEach(u -> System.out.println(u.toString()));
 
         ud.cleanUsersTable();
         ud.dropUsersTable();
-
-
     }
 }
