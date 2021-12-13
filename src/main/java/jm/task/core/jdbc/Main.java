@@ -23,6 +23,7 @@ public class Main {
         users.forEach(u -> ud.saveUser(u.getName(), u.getLastName(), u.getAge()));
         users = ud.getAllUsers();
         users.forEach(u -> System.out.println(u.toString()));
+
         ud.cleanUsersTable();
         ud.dropUsersTable();
 
